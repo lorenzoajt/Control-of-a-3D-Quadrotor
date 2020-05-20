@@ -25,7 +25,7 @@ If you come back to this step after the next step, you can try tuning just the b
 
 **If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position! You should also see the vehicle angle (Roll) get controlled to 0.**
 
-3.- Position/velocity and yaw angle control (scenario 3)
+## Position/velocity and yaw angle control (scenario 3)
 
 Next, you will implement the position, altitude and yaw control for your quad. For the simulation, you will use Scenario 3. This will create 2 identical quads, one offset from its target point (but initialized with yaw = 0) and second offset from target point but yaw = 45 degrees.
 
@@ -43,7 +43,66 @@ Tune position control for settling time. Don’t try to tune yaw control too tig
 
 **Hint:** For a second order system, such as the one for this quadcopter, the velocity gain (kpVelXY and kpVelZ) should be at least ~3-4 times greater than the respective position gain (kpPosXY and kpPosZ).
 
-3.- Non-idealities and robustness (scenario 4)
+## Non-idealities and robustness (scenario 4)
+In this part, we will explore some of the non-idealities and robustness of a controller. For this simulation, we will use Scenario 4. This is a configuration with 3 quads that are all are trying to move one meter forward. However, this time, these quads are all a bit different:
+
+- The green quad has its center of mass shifted back
+- The orange vehicle is an ideal quad
+- The red vehicle is heavier than usual
+1.- Run your controller & parameter set from Step 3. Do all the quads seem to be moving OK? If not, try to tweak the controller parameters to work for all 3 (tip: relax the controller).
+
+2.- Edit AltitudeControl() to add basic integral control to help with the different-mass vehicle.
+
+3.- Tune the integral control, and other control parameters until all the quads successfully move properly. Your drones' motion should look like this:
+
+## Tracking trajectories
+
+Now that we have all the working parts of a controller, you will put it all together and test it's performance once again on a trajectory. For this simulation, you will use Scenario 5. This scenario has two quadcopters:
+
+- the orange one is following traj/FigureEight.txt
+- the other one is following traj/FigureEightFF.txt - for now this is the same trajectory. For those interested in seeing how you might be able to improve the performance of your drone by adjusting how the trajectory is defined, check out Extra Challenge 1 below!
+How well is your drone able to follow the trajectory? It is able to hold to the path fairly well?
+
+## Performance Metrics
+The specific performance metrics are as follows:
+
+- scenario 2
+
+  - roll should less than 0.025 radian of nominal for 0.75 seconds (3/4 of the duration of the loop)
+roll rate should less than 2.5 radian/sec for 0.75 seconds
+
+-scenario 3
+
+  - X position of both drones should be within 0.1 meters of the target for at least 1.25 seconds
+Quad2 yaw should be within 0.1 of the target for at least 1 second
+
+-scenario 4
+
+  - position error for all 3 quads should be less than 0.1 meters for at least 1.5 seconds
+
+- scenario 5
+
+  - position error of the quad should be less than 0.25 meters for at least 3 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
