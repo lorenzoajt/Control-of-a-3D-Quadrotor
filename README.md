@@ -8,18 +8,37 @@ Your controller will need to stabilize the rotational motion and bring the vehic
 - implement the code in the function GenerateMotorCommands()
   <TODO> set evidence in code
 ```c++
-    float l = L / sqrt(2.f); 
-    float p_bar = momentCmd.x / l;
-    float q_bar = momentCmd.y / l;
-    float r_bar = - momentCmd.z / kappa;
-    float c_bar = collThrustCmd;
+V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
+{
+  // Calculate a desired 3-axis moment given a desired and current body rate
+  // INPUTS: 
+  //   pqrCmd: desired body rates [rad/s]
+  //   pqr: current or estimated body rates [rad/s]
+  // OUTPUT:
+  //   return a V3F containing the desired moments for each of the 3 axes
 
-    cmd.desiredThrustsN[0] = (p_bar + q_bar + r_bar + c_bar) / 4.f; // front left
-    cmd.desiredThrustsN[1] = (-p_bar + q_bar - r_bar + c_bar) / 4.f; // front right
-    cmd.desiredThrustsN[2] = (p_bar - q_bar - r_bar + c_bar) / 4.f; // rear left
-    cmd.desiredThrustsN[3] = (-p_bar - q_bar + r_bar + c_bar) / 4.f; // rear right
+  // HINTS: 
+  //  - you can use V3Fs just like scalars: V3F a(1,1,1), b(2,3,4), c; c=a-b;
+  //  - you'll need parameters for moments of inertia Ixx, Iyy, Izz
+  //  - you'll also need the gain parameter kpPQR (it's a V3F)
+
+  V3F momentCmd;
+
+  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+    V3F error = pqrCmd - pqr;
+    V3F Inertia;
+    Inertia.x = Ixx;
+    Inertia.y = Iyy;
+    Inertia.z = Izz;
+
+    momentCmd = Inertia * kpPQR * error;
+    
+  
+
   /////////////////////////////// END STUDENT CODE ////////////////////////////
-    return cmd;
+
+  return momentCmd;
+}
 ```
   
   
