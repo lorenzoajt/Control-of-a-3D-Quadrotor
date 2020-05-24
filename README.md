@@ -7,7 +7,7 @@ Your controller will need to stabilize the rotational motion and bring the vehic
 1.- Implement body rate control
 - implement the code in the function GenerateMotorCommands()
   <TODO> set evidence in code
-  '''c++
+```c++
     float l = L / sqrt(2.f); 
     float p_bar = momentCmd.x / l;
     float q_bar = momentCmd.y / l;
@@ -20,7 +20,7 @@ Your controller will need to stabilize the rotational motion and bring the vehic
     cmd.desiredThrustsN[3] = (-p_bar - q_bar + r_bar + c_bar) / 4.f; // rear right
   /////////////////////////////// END STUDENT CODE ////////////////////////////
     return cmd;
-  '''
+```
   
   
 - implement the code in the function BodyRateControl()
