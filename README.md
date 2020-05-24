@@ -30,7 +30,8 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   
 - implement the code in the function BodyRateControl()
   <TODO> set evidence in code
-  ```c++
+ 
+ ```c++
   V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
 {
   
