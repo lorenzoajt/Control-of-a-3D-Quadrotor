@@ -7,8 +7,31 @@ Your controller will need to stabilize the rotational motion and bring the vehic
 1.- Implement body rate control
 - implement the code in the function GenerateMotorCommands()
   <TODO> set evidence in code
+
 ```c++
-V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
+VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
+{
+    float l = L / sqrt(2.f);
+    float p_bar = momentCmd.x / l;
+    float q_bar = momentCmd.y / l;
+    float r_bar = - momentCmd.z / kappa;
+    float c_bar = collThrustCmd;
+
+    cmd.desiredThrustsN[0] = (p_bar + q_bar + r_bar + c_bar) / 4.f; // front left
+    cmd.desiredThrustsN[1] = (-p_bar + q_bar - r_bar + c_bar) / 4.f; // front right
+    cmd.desiredThrustsN[2] = (p_bar - q_bar - r_bar + c_bar) / 4.f; // rear left
+    cmd.desiredThrustsN[3] = (-p_bar - q_bar + r_bar + c_bar) / 4.f; // rear right
+
+    return cmd;
+}
+
+```
+  
+  
+- implement the code in the function BodyRateControl()
+  <TODO> set evidence in code
+  ```c++
+  V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
 {
   
     V3F error = pqrCmd - pqr;
@@ -21,13 +44,17 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
 
   return momentCmd;
 }
-```
+  ```
   
-  
-- implement the code in the function BodyRateControl()
-  <TODO> set evidence in code
+ 
 - Tune kpPQR in QuadControlParams.txt to get the vehicle to stop spinning quickly but not overshoot
     <TODO> set evidence in code
+    
+    ```txt
+    # Angle rate gains
+    kpPQR = 70, 70, 5
+    
+    ```
 
 **Rotation of the vehicle about roll (omega.x) get controlled to 0 while other rates remain zero.**
 <TODO> set evidence in image
