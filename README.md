@@ -10,21 +10,7 @@ Your controller will need to stabilize the rotational motion and bring the vehic
 ```c++
 V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
 {
-  // Calculate a desired 3-axis moment given a desired and current body rate
-  // INPUTS: 
-  //   pqrCmd: desired body rates [rad/s]
-  //   pqr: current or estimated body rates [rad/s]
-  // OUTPUT:
-  //   return a V3F containing the desired moments for each of the 3 axes
-
-  // HINTS: 
-  //  - you can use V3Fs just like scalars: V3F a(1,1,1), b(2,3,4), c; c=a-b;
-  //  - you'll need parameters for moments of inertia Ixx, Iyy, Izz
-  //  - you'll also need the gain parameter kpPQR (it's a V3F)
-
-  V3F momentCmd;
-
-  ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  
     V3F error = pqrCmd - pqr;
     V3F Inertia;
     Inertia.x = Ixx;
@@ -32,10 +18,6 @@ V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
     Inertia.z = Izz;
 
     momentCmd = Inertia * kpPQR * error;
-    
-  
-
-  /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return momentCmd;
 }
