@@ -66,7 +66,41 @@ If you come back to this step after the next step, you can try tuning just the b
 2.- Implement roll / pitch control We won't be worrying about yaw just yet.
 
 - implement the code in the function RollPitchControl()
+
+```c++
+V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, float collThrustCmd)
+{
+  V3F pqrCmd;
+  Mat3x3F R = attitude.RotationMatrix_IwrtB();
+
+    float acc = -collThrustCmd / mass;
+    float b_x_c = accelCmd.x / acc;
+    float b_y_c = accelCmd.y / acc;
+
+    float b_x = R(0,2);
+    float b_x_err = b_x_c - b_x;
+
+    float b_y = R(1, 2);
+    float b_y_err = b_y_c - b_y;
+
+    float b_x_c_dot = kpBank * b_x_err;
+    float b_y_c_dot = kpBank * b_y_err;
+
+    // following this tutorial https://www.mathsisfun.com/algebra/matrix-multiplying.html
+    pqrCmd.x = (R(1,0) * b_x_c_dot - R(0,0) * b_y_c_dot) / R(2,2);
+    pqrCmd.y = R(1,1) * b_x_c_dot - R(0,1) * b_y_c_dot / R(2,2);
+    pqrCmd.z = 0;
+
+  return pqrCmd;
+}
+```
+
 - Tune kpBank in QuadControlParams.txt to minimize settling time but avoid too much overshoot
+    ```txt
+    # Angle rate gains
+    kpPQR = 70, 70, 5
+    
+    ```
 
 **If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position! You should also see the vehicle angle (Roll) get controlled to 0.**
 
@@ -75,7 +109,50 @@ If you come back to this step after the next step, you can try tuning just the b
 Next, you will implement the position, altitude and yaw control for your quad. For the simulation, you will use Scenario 3. This will create 2 identical quads, one offset from its target point (but initialized with yaw = 0) and second offset from target point but yaw = 45 degrees.
 
 - implement the code in the function LateralPositionControl()
+
+```c++
+V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel, V3F accelCmdFF)
+{
+  V3F accelCmd = accelCmdFF;
+
+    velCmd.x = CONSTRAIN(velCmd.x, -maxSpeedXY, maxSpeedXY);
+    velCmd.y = CONSTRAIN(velCmd.y, -maxSpeedXY, maxSpeedXY);
+
+    V3F XY_dot_dot = kpPosXY * (posCmd - pos) + kpVelXY * (velCmd - vel);
+
+    XY_dot_dot.z = 0;
+
+    accelCmd += XY_dot_dot;
+    accelCmd.x = CONSTRAIN(accelCmd.x, -maxAccelXY, maxAccelXY);
+    accelCmd.y = CONSTRAIN(accelCmd.y, -maxAccelXY, maxAccelXY);
+    
+  return accelCmd;
+}
+
+```
+
 - implement the code in the function AltitudeControl()
+```c++
+float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
+{
+  Mat3x3F R = attitude.RotationMatrix_IwrtB();
+  float thrust = 0;
+    
+    float e = posZCmd - posZ;
+    float e_dot= velZCmd - velZ;
+    float b_z = R(2,2);
+    integratedAltitudeError += e * dt;
+
+    float u_bar = kpPosZ * e + kpVelZ * e_dot + KiPosZ * integratedAltitudeError;
+    u_bar = CONSTRAIN(u_bar, -maxAscentRate / dt, maxDescentRate / dt);
+    float c = (u_bar - float(CONST_GRAVITY)) / b_z;
+    thrust = -mass * c;
+  
+  return thrust;
+}
+
+```
+
 - tune parameters kpPosZ and kpPosZ
 - tune parameters kpVelXY and kpVelZ
 
