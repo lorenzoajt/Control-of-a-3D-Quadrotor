@@ -7,6 +7,22 @@ Your controller will need to stabilize the rotational motion and bring the vehic
 1.- Implement body rate control
 - implement the code in the function GenerateMotorCommands()
   <TODO> set evidence in code
+  '''cpp
+    float l = L / sqrt(2.f); 
+    float p_bar = momentCmd.x / l;
+    float q_bar = momentCmd.y / l;
+    float r_bar = - momentCmd.z / kappa;
+    float c_bar = collThrustCmd;
+
+    cmd.desiredThrustsN[0] = (p_bar + q_bar + r_bar + c_bar) / 4.f; // front left
+    cmd.desiredThrustsN[1] = (-p_bar + q_bar - r_bar + c_bar) / 4.f; // front right
+    cmd.desiredThrustsN[2] = (p_bar - q_bar - r_bar + c_bar) / 4.f; // rear left
+    cmd.desiredThrustsN[3] = (-p_bar - q_bar + r_bar + c_bar) / 4.f; // rear right
+  /////////////////////////////// END STUDENT CODE ////////////////////////////
+    return cmd;
+  '''
+  
+  
 - implement the code in the function BodyRateControl()
   <TODO> set evidence in code
 - Tune kpPQR in QuadControlParams.txt to get the vehicle to stop spinning quickly but not overshoot
