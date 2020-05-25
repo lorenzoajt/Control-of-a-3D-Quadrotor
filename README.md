@@ -159,6 +159,19 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 **If successful, the quads should be going to their destination points and tracking error should be going down (as shown below). However, one quad remains rotated in yaw.**
 
 - implement the code in the function YawControl()
+```c++
+float QuadControl::YawControl(float yawCmd, float yaw)
+{
+
+    float err = yawCmd - yaw;
+    yawRateCmd = kpYaw * (err);
+
+  return yawRateCmd;
+
+}
+
+```
+
 - tune parameters kpYaw and the 3rd (z) component of kpPQR
 
 Tune position control for settling time. Don’t try to tune yaw control too tightly, as yaw control requires a lot of control authority from a quadcopter and can really affect other degrees of freedom. This is why you often see quadcopters with tilted motors, better yaw authority!
