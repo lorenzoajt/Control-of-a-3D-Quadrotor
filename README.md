@@ -96,13 +96,15 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
 ```
 
 - Tune kpBank in QuadControlParams.txt to minimize settling time but avoid too much overshoot
-    ```txt
-    # Angle rate gains
-    kpPQR = 70, 70, 5
+```txt
+# Angle control gains
+kpBank = 7
     
-    ```
+```
 
 **If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position! You should also see the vehicle angle (Roll) get controlled to 0.**
+
+![Scenario 2](https://lorenzoajt.github.com/animations/scen2.gif)
 
 ## Position/velocity and yaw angle control (scenario 3)
 
