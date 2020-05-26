@@ -94,6 +94,9 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
 
 **Rotation of the vehicle about roll (omega.x) get controlled to 0 while other rates remain zero.**
 <TODO> set evidence in image
+<p align="center">
+<img src="scen2evidence.png" width="500"/>
+</p>
   
 If you come back to this step after the next step, you can try tuning just the body rate omega (without the outside angle controller) by setting QuadControlParams.kpBank = 0.
 
