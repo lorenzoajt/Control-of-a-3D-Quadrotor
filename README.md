@@ -1,5 +1,34 @@
 # Control-of-a-3D-Quadrotor
 
+The goal of this project is to implement a Full 3D Controller for a quadrotor in C++.
+# Full 3D Control Architecture
+<p align="center">
+<img src="control-architecture.png" width="500"/>
+</p>
+
+The architecture of this quadrotor controller consists in:
+
+Altitude controller: 2nd order system => PD Controller at least (I-term is used in scenario 4 to help with the different-mass vehicle.)
+
+Lateral controller: 2nd order system => PD Controller at least (I-term can be useful, but can be safely ignored)
+
+Yaw controller: 1st order system => P Controller
+
+Body rate controller: 1st order system => P Controller
+
+Roll/Pitch controller: 1st order system => P Controller
+
+
+# C++ Setup
+Regardless of your development platform, the first step is to download or clone the C++ simulator repository.
+
+```shell 
+git clone https://github.com/udacity/FCND-Controls-CPP.git
+```
+Once you have the code for the simulator, you will need to install the necessary compiler and IDE necessary for running the simulator. (Instructions for doing this are in https://github.com/udacity/FCND-Controls-CPP.git)
+
+Once you have successfully installed the recommended IDE for your OS and have the simulator running, you can replace with the files in this repository to run the simulations successfully.
+
 ## Body rate and roll/pitch control (scenario 2)
 
 Your controller will need to stabilize the rotational motion and bring the vehicle back to level attitude.
