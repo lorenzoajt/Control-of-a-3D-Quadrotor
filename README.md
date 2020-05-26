@@ -1,5 +1,34 @@
 # Control-of-a-3D-Quadrotor
 
+The goal of this project is to implement a Full 3D Controller for a quadrotor in C++.
+# Full 3D Control Architecture
+<p align="center">
+<img src="control-architecture.png" width="500"/>
+</p>
+
+The architecture of this quadrotor controller consists in:
+
+Altitude controller: 2nd order system => PD Controller at least (I-term is used in scenario 4 to help with the different-mass vehicle.)
+
+Lateral controller: 2nd order system => PD Controller at least (I-term can be useful, but can be safely ignored)
+
+Yaw controller: 1st order system => P Controller
+
+Body rate controller: 1st order system => P Controller
+
+Roll/Pitch controller: 1st order system => P Controller
+
+
+# C++ Setup
+Regardless of your development platform, the first step is to download or clone the C++ simulator repository.
+
+```shell 
+git clone https://github.com/udacity/FCND-Controls-CPP.git
+```
+Once you have the code for the simulator, you will need to install the necessary compiler and IDE necessary for running the simulator. (Instructions for doing this are in https://github.com/udacity/FCND-Controls-CPP.git)
+
+Once you have successfully installed the recommended IDE for your OS and have the simulator running, you can replace with the files in this repository to run the simulations successfully.
+
 ## Body rate and roll/pitch control (scenario 2)
 
 Your controller will need to stabilize the rotational motion and bring the vehicle back to level attitude.
@@ -96,13 +125,17 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
 ```
 
 - Tune kpBank in QuadControlParams.txt to minimize settling time but avoid too much overshoot
-    ```txt
-    # Angle rate gains
-    kpPQR = 70, 70, 5
+```txt
+# Angle control gains
+kpBank = 7
     
-    ```
+```
 
 **If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position! You should also see the vehicle angle (Roll) get controlled to 0.**
+
+<p align="center">
+<img src="animations/scen2.gif" width="500"/>
+</p>
 
 ## Position/velocity and yaw angle control (scenario 3)
 
@@ -156,6 +189,18 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 - tune parameters kpPosZ and kpPosZ
 - tune parameters kpVelXY and kpVelZ
 
+```txt
+# Position control gains
+kpPosXY = 30
+kpPosZ = 50
+KiPosZ = 30
+
+# Velocity control gains
+kpVelXY = 15
+kpVelZ = 5
+
+```
+
 **If successful, the quads should be going to their destination points and tracking error should be going down (as shown below). However, one quad remains rotated in yaw.**
 
 - implement the code in the function YawControl()
@@ -177,6 +222,10 @@ float QuadControl::YawControl(float yawCmd, float yaw)
 Tune position control for settling time. Don’t try to tune yaw control too tightly, as yaw control requires a lot of control authority from a quadcopter and can really affect other degrees of freedom. This is why you often see quadcopters with tilted motors, better yaw authority!
 
 **Hint:** For a second order system, such as the one for this quadcopter, the velocity gain (kpVelXY and kpVelZ) should be at least ~3-4 times greater than the respective position gain (kpPosXY and kpPosZ).
+
+<p align="center">
+<img src="animations/scen3.gif" width="500"/>
+</p>
 
 ## Non-idealities and robustness (scenario 4)
 In this part, we will explore some of the non-idealities and robustness of a controller. For this simulation, we will use Scenario 4. This is a configuration with 3 quads that are all are trying to move one meter forward. However, this time, these quads are all a bit different:
@@ -212,6 +261,10 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 
 3.- Tune the integral control, and other control parameters until all the quads successfully move properly. Your drones' motion should look like this:
 
+<p align="center">
+<img src="animations/scen4.gif" width="500"/>
+</p>
+
 ## Tracking trajectories
 
 Now that we have all the working parts of a controller, you will put it all together and test it's performance once again on a trajectory. For this simulation, you will use Scenario 5. This scenario has two quadcopters:
@@ -219,6 +272,13 @@ Now that we have all the working parts of a controller, you will put it all toge
 - the orange one is following traj/FigureEight.txt
 - the other one is following traj/FigureEightFF.txt - for now this is the same trajectory. For those interested in seeing how you might be able to improve the performance of your drone by adjusting how the trajectory is defined, check out Extra Challenge 1 below!
 How well is your drone able to follow the trajectory? It is able to hold to the path fairly well?
+
+<p align="center">
+<img src="animations/scen5-1.gif" width="500"/>
+</p>
+<p align="center">
+<img src="animations/scen5-2.gif" width="500"/>
+</p>
 
 ## Performance Metrics
 The specific performance metrics are as follows:
