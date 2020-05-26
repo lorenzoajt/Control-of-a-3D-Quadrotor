@@ -1,6 +1,12 @@
 # Control-of-a-3D-Quadrotor
 
 The goal of this project is to implement a Full 3D Controller for a quadrotor in C++.
+
+<p align="center">
+<img src="quad.png" width="500"/>
+</p>
+
+
 # Full 3D Control Architecture
 <p align="center">
 <img src="control-architecture.png" width="500"/>
