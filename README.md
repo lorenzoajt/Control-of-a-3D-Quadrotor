@@ -104,8 +104,9 @@ kpBank = 7
 
 **If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position! You should also see the vehicle angle (Roll) get controlled to 0.**
 
-![Scenario 2](https://lorenzoajt.github.com/animations/scen2.gif)
-
+<p align="center">
+<img src="animations/scen2.gif" width="500"/>
+</p>
 ## Position/velocity and yaw angle control (scenario 3)
 
 Next, you will implement the position, altitude and yaw control for your quad. For the simulation, you will use Scenario 3. This will create 2 identical quads, one offset from its target point (but initialized with yaw = 0) and second offset from target point but yaw = 45 degrees.
