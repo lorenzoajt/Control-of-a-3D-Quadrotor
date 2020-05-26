@@ -143,7 +143,7 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
     float b_z = R(2,2);
     integratedAltitudeError += e * dt;
 
-    float u_bar = kpPosZ * e + kpVelZ * e_dot + KiPosZ * integratedAltitudeError;
+    float u_bar = kpPosZ * e + kpVelZ * e_dot;
     u_bar = CONSTRAIN(u_bar, -maxAscentRate / dt, maxDescentRate / dt);
     float c = (u_bar - float(CONST_GRAVITY)) / b_z;
     thrust = -mass * c;
@@ -187,6 +187,27 @@ In this part, we will explore some of the non-idealities and robustness of a con
 1.- Run your controller & parameter set from Step 3. Do all the quads seem to be moving OK? If not, try to tweak the controller parameters to work for all 3 (tip: relax the controller).
 
 2.- Edit AltitudeControl() to add basic integral control to help with the different-mass vehicle.
+
+```c++
+float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
+{
+  Mat3x3F R = attitude.RotationMatrix_IwrtB();
+  float thrust = 0;
+    
+    float e = posZCmd - posZ;
+    float e_dot= velZCmd - velZ;
+    float b_z = R(2,2);
+    integratedAltitudeError += e * dt;
+
+    float u_bar = kpPosZ * e + kpVelZ * e_dot + KiPosZ * integratedAltitudeError;
+    u_bar = CONSTRAIN(u_bar, -maxAscentRate / dt, maxDescentRate / dt);
+    float c = (u_bar - float(CONST_GRAVITY)) / b_z;
+    thrust = -mass * c;
+  
+  return thrust;
+}
+
+```
 
 3.- Tune the integral control, and other control parameters until all the quads successfully move properly. Your drones' motion should look like this:
 
