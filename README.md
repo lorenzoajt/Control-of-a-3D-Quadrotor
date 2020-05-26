@@ -184,6 +184,7 @@ In this part, we will explore some of the non-idealities and robustness of a con
 - The green quad has its center of mass shifted back
 - The orange vehicle is an ideal quad
 - The red vehicle is heavier than usual
+
 1.- Run your controller & parameter set from Step 3. Do all the quads seem to be moving OK? If not, try to tweak the controller parameters to work for all 3 (tip: relax the controller).
 
 2.- Edit AltitudeControl() to add basic integral control to help with the different-mass vehicle.
